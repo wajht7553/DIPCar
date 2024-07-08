@@ -1,7 +1,7 @@
 import cv2
 from src.perception.camera import Camera
 from src.perception.object_detection import ObjectDetector
-from src.custom_utils.visualiztions import draw_detections
+from src.custom_utils.visualizations import draw_detections
 from src.control.motor_control import MotorControl
 from src.control.steering_control import SteeringControl
 

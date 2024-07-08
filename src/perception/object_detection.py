@@ -1,7 +1,8 @@
 import cv2
 import torch
-from src.perception.camera import Camera
-from src.custom_utils.visualiztions import draw_detections
+from camera import Camera
+from custom_utils.visualizations import draw_detections
+
 
 class ObjectDetector:
     def __init__(self, model_path='../../data/models/yolov5s.pt'):
