@@ -12,17 +12,16 @@ class Camera:
         fps (int): The number of frames in case of video stream. Be careful as high resolutions doesn't support high fps
         flip (int): how to flip the captured stream
     """    
-    def __init__(self, source=0, width=1920, height=1080, fps=30, flip=0):
+    def __init__(self, camera_id=0, width=1920, height=1080, fps=30, flip=0):
         """
         Initialize the various attributes
         """      
-        self.source = source
+        self.camera_id = camera_id
         self.width = width
         self.height = height
         self.fps = fps
         self.flip = flip
         self.cap = cv2.VideoCapture(self._gstreamer_pipeline(), cv2.CAP_GSTREAMER)
-        # self.cap = cv2.VideoCapture(self.source)
 
     def _gstreamer_pipeline(self):
         """Create a GStreamer pipline
