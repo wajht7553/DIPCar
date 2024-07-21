@@ -100,17 +100,17 @@ def main():
     try:
         start_pwm(0)  # Start PWM with 0% duty cycle
 
-        move_forward(100)
-        time.sleep(1)
+        move_forward(10)
+        time.sleep(5)
 
         move_forward(50)
         time.sleep(1)
 
-        move_forward(75)
-        time.sleep(1)
+        # move_forward(75)
+        # time.sleep(1)
 
-        move_backward(50)
-        time.sleep(1)
+        # move_backward(50)
+        # time.sleep(1)
 
     except KeyboardInterrupt:
         print("Program stopped by the user")

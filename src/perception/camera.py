@@ -1,4 +1,6 @@
+#!/usr/bin/python3
 import cv2
+
 
 class Camera:
     """
@@ -9,27 +11,31 @@ class Camera:
         camera_id (int): the id of the camera if USB camera is being used
         width (int): The width of the captured frame
         height (int): The height of the captured frame
-        fps (int): The number of frames in case of video stream. Be careful as high resolutions doesn't support high fps
+        fps (int): The number of frames in case of video stream.
+                    Be careful as high resolutions doesn't support high fps
         flip (int): how to flip the captured stream
-    """    
+    """
+
     def __init__(self, source=0, width=1920, height=1080, fps=30, flip=0):
         """
         Initialize the various attributes
-        """      
+        """
         self.source = source
         self.width = width
         self.height = height
         self.fps = fps
         self.flip = flip
-        self.cap = cv2.VideoCapture(self._gstreamer_pipeline(), cv2.CAP_GSTREAMER)
-        # self.cap = cv2.VideoCapture(self.source)
+        # self.cap = cv2.VideoCapture(
+        #     self._gstreamer_pipeline(), cv2.CAP_GSTREAMER)
+        self.cap = cv2.VideoCapture(self.source)
 
     def _gstreamer_pipeline(self):
         """Create a GStreamer pipline
 
         Returns:
-            String: a string that represents the various parameters of the pipeline
-        """        
+            String: a string that represents the various
+            parameters of the pipeline
+        """
         return (
             f"nvarguscamerasrc ! "
             f"video/x-raw(memory:NVMM), "
@@ -39,7 +45,7 @@ class Camera:
             f"video/x-raw, width=1280, height=720, format=BGRx ! "
             f"videoconvert ! "
             f"video/x-raw, format=BGR ! appsink"
-                )         
+        )
 
     def capture_frame(self):
         """Capture a single frame
@@ -49,7 +55,7 @@ class Camera:
 
         Returns:
             image: the captured frame as a numpy array
-        """        
+        """
         success, frame = self.cap.read()
         if not success:
             raise Exception("Failed to capture image")
@@ -57,8 +63,9 @@ class Camera:
 
     def release(self):
         """Release the pipeline
-        """        
+        """
         self.cap.release()
+
 
 # Example usage:
 if __name__ == "__main__":

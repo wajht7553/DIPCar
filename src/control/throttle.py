@@ -8,6 +8,7 @@ class ThrottleController:
     """
     A class to control throttle using software PWM on a Jetson Nano.
     """
+
     def __init__(self, ena_pin, in1_pin, in2_pin, pwm_frequency=100):
         """
         Initialize the ThrottleController.
@@ -64,6 +65,7 @@ class ThrottleController:
 
     def set_throttle(self, percentage):
         """
+        
         Set the throttle to a specific percentage.
 
         :param percentage: Throttle percentage (0-100)
