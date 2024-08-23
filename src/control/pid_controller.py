@@ -10,7 +10,8 @@ class PIDController:
         error = target - current
         self.integral += error
         derivative = error - self.previous_error
-        output = self.kp * error + self.ki * self.integral + self.kd * derivative
+        output = (self.kp * error + self.ki * 
+                  self.integral + self.kd * derivative)
         self.previous_error = error
         return output
 
