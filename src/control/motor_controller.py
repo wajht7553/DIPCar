@@ -10,13 +10,16 @@ class DIPCar:
     as well as the lateral movement of the car. A very simple prototype model,
     indeed.
     """    
-    def __init__(self):
+    def __init__(self,
+                 left_motor_pins=(31, 32, 33),
+                 right_motor_pins=(36, 37, 38)
+                 ):
         """
         Initialize and setup the pins to which the motors are connected
         """        
         gpio.setmode(gpio.BOARD)
-        self.ena, self.in1, self.in2 = 31, 32, 33  # left motors
-        self.enb, self.in3, self.in4 = 36, 37, 38  # right motors
+        self.ena, self.in1, self.in2 = left_motor_pins
+        self.enb, self.in3, self.in4 = right_motor_pins
 
         self._setup_pins()
 
