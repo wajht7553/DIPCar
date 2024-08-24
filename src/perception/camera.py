@@ -47,7 +47,7 @@ class Camera:
             f"video/x-raw, format=BGR ! appsink"
         )
 
-    def capture_frame(self):
+    def read(self):
         """Capture a single frame
 
         Raises:
@@ -57,9 +57,7 @@ class Camera:
             image: the captured frame as a numpy array
         """
         success, frame = self.cap.read()
-        if not success:
-            raise Exception("Failed to capture image")
-        return frame
+        return success, frame
 
     def release(self):
         """Release the pipeline

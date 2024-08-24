@@ -3,3 +3,4 @@
 **/test_road.mp4
 *.pyc
 **/tempCodeRunnerFile.py
+src/perception/calibration_images/
