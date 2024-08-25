@@ -1,6 +1,8 @@
 import os
 import cv2
-from camera import Camera
+
+from ..perception.utils.camera import Camera
+
 
 # Parameters
 output_dir = 'src/perception/calibration_images'
@@ -32,5 +34,5 @@ while counter < num_images:
         print(f'Captured {img_name}')
         counter += 1
 
-camera.release()
+camera.close()
 cv2.destroyAllWindows()

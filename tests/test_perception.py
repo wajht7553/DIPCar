@@ -1,5 +1,5 @@
 import unittest
-from src.perception.camera import Camera
+from src.perception.utils.camera import Camera
 from src.perception.object_detection import ObjectDetector
 
 
@@ -12,7 +12,7 @@ class TestCamera(unittest.TestCase):
         camera = Camera()
         frame = camera.capture_frame()
         self.assertEqual(len(frame.shape), 3)
-        camera.release()
+        camera.close()
 
 
 class TestObjectDetection(unittest.TestCase):
@@ -26,7 +26,7 @@ class TestObjectDetection(unittest.TestCase):
         frame = camera.capture_frame()
         detections = detector.detect_objects(frame)
         self.assertIsInstance(detections, list)
-        camera.release()
+        camera.close()
 
 
 if __name__ == "__main__":

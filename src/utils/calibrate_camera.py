@@ -1,11 +1,12 @@
 import cv2
 import glob
 import numpy as np
+from src.perception.utils.camera import Camera
 
 # Parameters
 # Number of inner corners per a chessboard row and column
-chessboard_size = (6, 9)
-square_size = 1.0  # Size of a square in your defined unit (e.g., millimeters)
+chessboard_size = (5, 8)
+square_size = 15.0  # Size of a square in your defined unit (e.g., millimeters)
 calibration_images_dir = 'src\perception\calibration_images\*.png'
 
 # Termination criteria for cornerSubPix
@@ -30,20 +31,19 @@ for file_name in images:
 
     # Find the chessboard corners
     ret, corners = cv2.findChessboardCorners(
-        gray, chessboard_size,)
-    print(f'corners: {corners}')
+        gray, chessboard_size, None)
     # If found, refine the corners and add to the list
     if ret:
         objpoints.append(objp)
 
-        corners2 = cv2.cornerSubPix(
+        corners = cv2.cornerSubPix(
             gray, corners, (11, 11), (-1, -1), criteria)
-        imgpoints.append(corners2)
+        imgpoints.append(corners)
 
         # Draw and display the corners
-        img = cv2.drawChessboardCorners(img, chessboard_size, corners2, ret)
+        img = cv2.drawChessboardCorners(img, chessboard_size, corners, ret)
         cv2.imshow('Calibration', img)
-        cv2.waitKey(500)
+        cv2.waitKey(1000)
 
 cv2.destroyAllWindows()
 # Perform camera calibration

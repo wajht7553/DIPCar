@@ -1,7 +1,7 @@
 import cv2
 import torch
-from camera import Camera
-from custom_utils.visualizations import draw_detections
+from src.perception.utils.camera import Camera
+from src.perception.utils.visualizations import draw_detections
 
 
 class ObjectDetector:
@@ -32,5 +32,5 @@ if __name__ == "__main__":
         cv2.imshow('Object Detection', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-    cam.release()
+    cam.close()
     cv2.destroyAllWindows()

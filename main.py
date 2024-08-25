@@ -1,5 +1,5 @@
 import cv2
-from src.perception.camera import Camera
+from src.perception.utils.camera import Camera
 from src.perception.object_detection import ObjectDetector
 from src.custom_utils.visualizations import draw_detections
 from src.control.motor_controller import DIPCar
@@ -26,7 +26,7 @@ def main():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    cam.release()
+    cam.close()
     cv2.destroyAllWindows()
 
 
