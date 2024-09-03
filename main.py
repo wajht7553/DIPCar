@@ -1,33 +1,22 @@
 import cv2
+
 from src.perception.utils.camera import Camera
-from src.perception.object_detection import ObjectDetector
-from src.custom_utils.visualizations import draw_detections
 from src.control.motor_controller import DIPCar
+from jetson_utils import videoSource, videoOutput
+from src.perception.object_detection import ObjectDetector
 
 
 def main():
-    cam = Camera()
-    detector = ObjectDetector("data/models/yolov5s.pt")
+    camera = '/dev/video0'
+    display = True
+    detector = ObjectDetector(
+        model_path='/home/dipcar/DIPCar/data/models/ssd-mobilenet.onnx',
+        labels_path='/home/dipcar/DIPCar/data/models/labels.txt',
+        camera=camera, display=display
+        )
     dipcar = DIPCar()
 
-    while True:
-        frame = cam.capture_frame()
-        detections = detector.detect_objects(frame)
-
-        if len(detections.xyxy[0]) > 0:  # If any objects detected
-            # Simple logic to avoid obstacles: stop if object detected
-            dipcar.stop_motors()
-        else:
-            dipcar.forward(25)
-
-        frame = draw_detections(frame, detections, detector.model.names)
-        cv2.imshow('Autonomous Vehicle - Object Detection', frame)
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    cam.close()
-    cv2.destroyAllWindows()
+    
 
 
 if __name__ == "__main__":
