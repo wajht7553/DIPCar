@@ -131,17 +131,17 @@ def main():
     
     while True:
         try:
-            # dipcar.forward(25)
-            # time.sleep(2)
+            dipcar.forward(25)
+            time.sleep(2)
 
             dipcar.steer_left(35)
             time.sleep(2)
 
-            # dipcar.steer_right(25)
-            # time.sleep(2)
+            dipcar.steer_right(25)
+            time.sleep(2)
 
-            # dipcar.backward(25)
-            # time.sleep(5)
+            dipcar.backward(25)
+            time.sleep(2)
 
         except KeyboardInterrupt:
             print("Program stopped by the user")
