@@ -13,7 +13,7 @@ class Camera:
         flip (int): The flip method of the captured frame. Default is 0.
     """
 
-    def __init__(self, source=0, width=1920, height=1080, fps=30, flip=0):
+    def __init__(self, source=0, width=1920, height=1080, fps=24, flip=0):
         """
         Initializes the Camera object.
         Parameters:
