@@ -4,9 +4,32 @@ from jetson_utils import videoSource, videoOutput
 
 
 class ObjectDetector:
+    """
+    Class for performing object detection using a custom trained model.
+    Args:
+        model_path (str): The path to the model file.
+        labels_path (str): The path to the labels file.
+        threshold (float, optional): The detection threshold.
+        Defaults to 0.5.
+        camera (str, optional): The camera source. Defaults to None.
+        display (bool, optional): Whether to display the detection
+        results. Defaults to False.
+    """
+
     def __init__(self, model_path, labels_path,
                  threshold=0.5, camera=None,
                  display=False):
+        """
+        Initializes an object detection instance.
+        Args:
+            model_path (str): The path to the model file.
+            labels_path (str): The path to the labels file.
+            threshold (float, optional): The detection threshold.
+            Defaults to 0.5.
+            camera (str, optional): The camera source. Defaults to None.
+            display (bool, optional): Whether to display the output.
+            Defaults to False.
+        """
         self.model_path = model_path
         self.labels_path = labels_path
         self.threshold = threshold
@@ -19,6 +42,15 @@ class ObjectDetector:
             output_bbox='boxes', threshold=self.threshold)
 
     def detect(self):
+        """
+        Performs object detection on the captured image using the
+        network model.
+        Returns:
+            None
+        Raises:
+            None
+        """
+
         while True:
             image = self.camera.Capture()
             detections = self.net.Detect(image)
