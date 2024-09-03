@@ -68,7 +68,9 @@ class ObjectDetector:
 def main():
     model_path = '/home/dipcar/DIPCar/data/models/ssd-mobilenet.onnx'
     labels_path = '/home/dipcar/DIPCar/data/models/labels.txt'
-    detector = ObjectDetector(model_path, labels_path, display=True)
+    detector = ObjectDetector(
+        model_path, labels_path,
+        camera="/dev/video0 ! video/x-raw, framerate=15/1 ! videoconvert ! video/x-raw, format=BGR ! appsink", display=True)
     detector.detect()
 
 
