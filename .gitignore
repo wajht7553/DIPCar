@@ -4,3 +4,4 @@
 *.pyc
 **/tempCodeRunnerFile.py
 src/perception/calibration_images/
+data/models/
