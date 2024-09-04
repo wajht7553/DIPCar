@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from jetson_inference import detectNet
+from src.control.software_pwm import PWM
 from src.control.motor_controller import DIPCar
 from jetson_utils import videoSource, videoOutput
 
