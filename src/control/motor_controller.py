@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 import time
 from software_pwm import PWM
 import Jetson.GPIO as gpio
@@ -6,17 +6,22 @@ import Jetson.GPIO as gpio
 
 class DIPCar:
     """
-    DIPCar, composed of left and right motors that control the longitudnal
-    as well as the lateral movement of the car. A very simple prototype model,
-    indeed.
-    """    
+    DIPCar, composed of left and right motors that control the
+    longitudnal as well as the lateral movement of the car.
+    A simple prototype model, indeed.
+    """
     def __init__(self,
                  left_motor_pins=(31, 32, 33),
                  right_motor_pins=(36, 37, 38)
                  ):
         """
-        Initialize and setup the pins to which the motors are connected
-        """        
+        Initializes the motor controller object.
+        Args:
+            left_motor_pins (tuple): A tuple containing the GPIO pins
+                for the left motor.
+            right_motor_pins (tuple): A tuple containing the GPIO pins
+                for the right motor.
+        """
         gpio.setmode(gpio.BOARD)
         self.ena, self.in1, self.in2 = left_motor_pins
         self.enb, self.in3, self.in4 = right_motor_pins
@@ -29,19 +34,28 @@ class DIPCar:
 
     def _setup_pins(self):
         """
-        Setup the pins as output pins starting with LOW values
-        """        
+        Sets up the GPIO pins for motor control.
+        This method initializes the GPIO pins for motor control by
+        setting them as outputs and setting their initial state to LOW.
+
+        Args:
+            None
+        Returns:
+            None
+        """
         for pin in [self.ena, self.in1, self.in2,
                     self.enb, self.in3, self.in4]:
             gpio.setup(pin, gpio.OUT, initial=gpio.LOW)
 
     def forward(self, speed):
         """
-        Move DIPCar forward at specified speed
-
+        Moves the car forward at the specified speed.
         Args:
-            speed (int): forward speed
-        """        
+            speed (int): The speed of the motors, ranging from 0 to 100.
+        Returns:
+            None
+        """
+
         print(f"Moving forward at {speed}% speed")
         gpio.output(self.in1, gpio.LOW)
         gpio.output(self.in2, gpio.HIGH)
@@ -51,11 +65,12 @@ class DIPCar:
 
     def backward(self, speed):
         """
-        Move DIPCar backward at specified speed
-
+        Moves the car backward at the specified speed.
         Args:
-            speed (int): backward speed
-        """        
+            speed (int): The speed of the motors, ranging from 0 to 100.
+        Returns:
+            None
+        """
         print(f"Moving backward at {speed}% speed")
         gpio.output(self.in1, gpio.HIGH)
         gpio.output(self.in2, gpio.LOW)
@@ -65,13 +80,16 @@ class DIPCar:
 
     def steer_left(self, speed, turn_factor=0.5):
         """
-        Steer DIPCar to the left
+        Steers the car to the left at a specified speed.
 
         Args:
-            speed (int): turn speed
-            turn_factor (float, optional): turn speed will be reduced by
-                                           this factor. Defaults to 0.5.
-        """        
+            speed (int): The speed at which to turn left,
+                expressed as a percentage.
+            turn_factor (float): The factor by which to reduce the speed
+                of the right motor. Default is 0.5.
+        Returns:
+            None
+        """
         print(f"Turning left at {speed}% speed")
         # left_speed = speed * (1 - turn_factor)
         right_speed = speed
@@ -84,12 +102,15 @@ class DIPCar:
 
     def steer_right(self, speed, turn_factor=0.5):
         """
-        Steer DIPCar to the right
+        Steers the car to the right at a specified speed.
 
         Args:
-            speed (int): turn speed
-            turn_factor (float, optional): turn speed will be reduced by
-                                           this factor. Defaults to 0.5.
+            speed (int): The speed at which to turn right,
+                expressed as a percentage.
+            turn_factor (float): The factor by which to reduce the speed
+                of the left motor. Default is 0.5.
+        Returns:
+            None
         """
         print(f"Turning right at {speed}% speed")
         left_speed = speed
@@ -102,10 +123,18 @@ class DIPCar:
         gpio.output(self.in4, gpio.LOW)
         self.pwm.start(left_speed)
 
-    def stop_motors(self):
+    def stop(self):
         """
-        Stop DIPCar
-        """        
+        Stops the motors.
+        This method stops the motors by turning off the PWM signal
+        and setting the GPIO pins to LOW.
+
+        Args:
+            None
+        Returns:
+            None
+        """
+        
         print("Stopping motors")
         self.pwm.stop()
         for pin in [self.in1, self.in2, self.in3, self.in4]:
@@ -114,17 +143,21 @@ class DIPCar:
 
     def cleanup(self):
         """
-        Perform necessary cleanup after stopping DIPCar
-        """        
-        self.stop_motors()
+        Clean up the motor controller by stopping the motors and
+        cleaning up GPIO resources.
+
+        Args:
+            None
+        Returns:
+            None
+        """
+
+        self.stop()
         gpio.cleanup()
         print("Exiting")
 
 
 def main():
-    """
-    Test DIPCar
-    """    
     print("DIPCar started...")
     dipcar = DIPCar()
     dipcar.pwm.start(0)  # Start PWM with 0% duty cycle
