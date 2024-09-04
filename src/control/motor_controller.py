@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import time
-from software_pwm import PWM
 import Jetson.GPIO as gpio
+from src.control.software_pwm import PWM
 
 
 class DIPCar:
@@ -25,12 +25,14 @@ class DIPCar:
         gpio.setmode(gpio.BOARD)
         self.ena, self.in1, self.in2 = left_motor_pins
         self.enb, self.in3, self.in4 = right_motor_pins
-
         self._setup_pins()
 
         self.pwm = PWM()
         self.pwm.add_pin(self.ena)
         self.pwm.add_pin(self.enb)
+        self.pwm.start(0)
+
+        self.is_moving = False
 
     def _setup_pins(self):
         """
@@ -62,6 +64,7 @@ class DIPCar:
         gpio.output(self.in3, gpio.LOW)
         gpio.output(self.in4, gpio.HIGH)
         self.pwm.set_duty_cycle(speed)
+        self.is_moving = True
 
     def backward(self, speed):
         """
@@ -77,6 +80,7 @@ class DIPCar:
         gpio.output(self.in3, gpio.HIGH)
         gpio.output(self.in4, gpio.LOW)
         self.pwm.set_duty_cycle(speed)
+        self.is_moving = True
 
     def steer_left(self, speed, turn_factor=0.5):
         """
@@ -99,6 +103,7 @@ class DIPCar:
         gpio.output(self.in3, gpio.LOW)
         gpio.output(self.in4, gpio.HIGH)
         self.pwm.start(right_speed)
+        self.is_moving = True
 
     def steer_right(self, speed, turn_factor=0.5):
         """
@@ -122,12 +127,12 @@ class DIPCar:
         gpio.output(self.in3, gpio.LOW)
         gpio.output(self.in4, gpio.LOW)
         self.pwm.start(left_speed)
+        self.is_moving = True
 
     def stop(self):
         """
         Stops the motors.
-        This method stops the motors by turning off the PWM signal
-        and setting the GPIO pins to LOW.
+        This method stops the motors by setting the GPIO pins to LOW.
 
         Args:
             None
@@ -136,15 +141,15 @@ class DIPCar:
         """
         
         print("Stopping motors")
-        self.pwm.stop()
         for pin in [self.in1, self.in2, self.in3, self.in4]:
             gpio.output(pin, gpio.LOW)
+        self.is_moving = False
         print("Motors stopped")
 
     def cleanup(self):
         """
-        Clean up the motor controller by stopping the motors and
-        cleaning up GPIO resources.
+        Clean up the motor controller by stopping the motors,
+        pwm and cleaning up GPIO resources.
 
         Args:
             None
@@ -153,6 +158,7 @@ class DIPCar:
         """
 
         self.stop()
+        self.pwm.stop()
         gpio.cleanup()
         print("Exiting")
 
@@ -160,8 +166,7 @@ class DIPCar:
 def main():
     print("DIPCar started...")
     dipcar = DIPCar()
-    dipcar.pwm.start(0)  # Start PWM with 0% duty cycle
-    
+
     while True:
         try:
             dipcar.forward(25)
