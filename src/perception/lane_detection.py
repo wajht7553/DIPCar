@@ -2,6 +2,14 @@ import cv2
 import numpy as np
 
 def process_frame(frame):
+    """
+    Process a frame for lane detection.
+    Args:
+        frame (numpy.ndarray): The input frame.
+    Returns:
+        numpy.ndarray: The processed frame with detected lane lines.
+    """
+
     # Convert the frame to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -29,7 +37,8 @@ def process_frame(frame):
     masked_edges = cv2.bitwise_and(edges, mask)
 
     # Use HoughLinesP to detect lines in the masked edge image
-    lines = cv2.HoughLinesP(masked_edges, 1, np.pi / 180, 50, maxLineGap=50, minLineLength=100)
+    lines = cv2.HoughLinesP(masked_edges, 1, np.pi / 180, 50,
+                            maxLineGap=50, minLineLength=100)
 
     # Create an image to draw the lines on
     line_image = np.zeros_like(frame)
