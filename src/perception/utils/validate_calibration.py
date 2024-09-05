@@ -7,14 +7,14 @@ def load_calibration(calibration_file):
     """
     Load calibration data from a file.
     Parameters:
-    - calibration_file (str): The path to the calibration file.
+        calibration_file (str): The path to the calibration file.
     Returns:
-    - mtx (ndarray): The camera matrix.
-    - dist (ndarray): The distortion coefficients.
-    - rvecs (list): A list of rotation vectors.
-    - tvecs (list): A list of translation vectors.
-    - objpoints (list): A list of object points.
-    - imgpoints (list): A list of image points.
+        mtx (ndarray): The camera matrix.
+        dist (ndarray): The distortion coefficients.
+        rvecs (list): A list of rotation vectors.
+        tvecs (list): A list of translation vectors.
+        objpoints (list): A list of object points.
+        imgpoints (list): A list of image points.
     """
     with np.load(calibration_file) as data:
         camera_matrix = data['camera_matrix']
@@ -28,25 +28,26 @@ def load_calibration(calibration_file):
             pattern_size, objpoints, imgpoints)
 
 
-def compute_reprojection_error(camera_matrix, dist_coeffs, 
+def compute_reprojection_error(camera_matrix, dist_coeffs,
                                rvecs, tvecs, objpoints, imgpoints):
     """
     Compute the reprojection error of the calibration.
     Parameters:
-    - camera_matrix (ndarray): The camera matrix.
-    - dist_coeffs (ndarray): The distortion coefficients.
-    - rvecs (list): A list of rotation vectors.
-    - tvecs (list): A list of translation vectors.
-    - objpoints (list): A list of object points.
-    - imgpoints (list): A list of image points.
+        camera_matrix (ndarray): The camera matrix.
+        dist_coeffs (ndarray): The distortion coefficients.
+        rvecs (list): A list of rotation vectors.
+        tvecs (list): A list of translation vectors.
+        objpoints (list): A list of object points.
+        imgpoints (list): A list of image points.
     Returns:
-    - mean_error (float): The mean reprojection error.
+        mean_error (float): The mean reprojection error.
     """
     total_error = 0
     for i in range(len(objpoints)):
         imgpoints2, _ = cv2.projectPoints(
             objpoints[i], rvecs[i], tvecs[i], camera_matrix, dist_coeffs)
-        error = cv2.norm(imgpoints[i], imgpoints2, cv2.NORM_L2) / len(imgpoints2)
+        error = cv2.norm(imgpoints[i], imgpoints2,
+                         cv2.NORM_L2) / len(imgpoints2)
         total_error += error
 
     mean_error = total_error / len(objpoints)
@@ -57,12 +58,12 @@ def validate_calibration(camera, camera_matrix, dist_coeffs, pattern_size):
     """
     Validates the calibration of a camera using a chessboard pattern.
     Parameters:
-    - camera: The camera object used for capturing frames.
-    - camera_matrix: The camera matrix used for undistorting frames.
-    - dist_coeffs: The distortion coefficients used for undistorting frames.
-    - pattern_size: The size of the chessboard pattern used for calibration.
+        camera: The camera object used for capturing frames.
+        camera_matrix: The camera matrix used for undistorting frames.
+        dist_coeffs: The distortion coefficients used for undistorting frames.
+        pattern_size: The size of the chessboard pattern used for calibration.
     Returns:
-    None
+        None
     """
 
     while True:

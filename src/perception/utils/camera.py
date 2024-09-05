@@ -17,13 +17,15 @@ class Camera:
         """
         Initializes the Camera object.
         Parameters:
-        - source (int or str): The source of the camera. It can be either an integer representing the camera index or a string representing the video file path.
-        - width (int): The width of the camera frame.
-        - height (int): The height of the camera frame.
-        - fps (int): The frames per second of the camera.
-        - flip (int): The flip code for the camera frame.
+            source (int or str): The source of the camera.
+                It can be either an integer representing the camera
+                index or a string representing the video file path.
+            width (int): The width of the camera frame.
+            height (int): The height of the camera frame.
+            fps (int): The frames per second of the camera.
+            flip (int): The flip code for the camera frame.
         Returns:
-        None
+            None
         """
 
         self.source = source
@@ -57,7 +59,9 @@ class Camera:
         """
         Reads a frame from the camera.
         Returns:
-            tuple: A tuple containing the success status and the frame.
+            success (bool): True if the frame was successfully read,
+                False otherwise.
+            frame: The captured frame from the camera.
         """
 
         success, frame = self.cap.read()
@@ -65,7 +69,12 @@ class Camera:
 
     def close(self):
         """
-        Closes the camera by releasing the capture and destroying any open windows.
+        Closes the camera by releasing the capture
+        and destroying any open windows.
+        Args:
+            None
+        Returns:
+            None
         """
 
         self.cap.release()

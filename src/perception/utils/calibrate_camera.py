@@ -7,9 +7,9 @@ def create_object_points(pattern_size):
     """
     Create object points for calibration using circles grid.
     Parameters:
-    pattern_size (tuple): The size of the pattern grid.
+        pattern_size (tuple): The size of the pattern grid.
     Returns:
-    np.ndarray: The object points for calibration.
+        np.ndarray: The object points for calibration.
     """
 
     objp = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
@@ -21,14 +21,16 @@ def calibrate_camera(images_dir, pattern_size, object_points):
     """
     Calibrates the camera using a set of images, a pattern size, and object points.
     Parameters:
-    - images_dir (str): A string representing the images path.
-    - pattern_size (tuple): The size of the pattern used for calibration.
-    - object_points (list): A list of object points corresponding to the pattern.
+        images_dir (str): A string representing the images path.
+        pattern_size (tuple): The size of the pattern used for
+            calibration.
+        object_points (list): A list of object points corresponding
+            to the pattern.
     Returns:
-    - mtx (ndarray): The camera matrix.
-    - dist (ndarray): The distortion coefficients.
-    - rvecs (list): A list of rotation vectors.
-    - tvecs (list): A list of translation vectors.
+        mtx (ndarray): The camera matrix
+        dist (ndarray): The distortion coefficients.
+        rvecs (list): A list of rotation vectors.
+        tvecs (list): A list of translation vectors.
     """
     obj_points = []
     img_points = []
