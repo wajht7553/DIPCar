@@ -25,7 +25,7 @@ class DIPCar:
         gpio.setmode(gpio.BOARD)
         self.ena, self.in1, self.in2 = left_motor_pins
         self.enb, self.in3, self.in4 = right_motor_pins
-        self._setup_pins()
+        self.setup_pins()
 
         self.pwm = PWM()
         self.pwm.add_pin(self.ena)
@@ -34,7 +34,7 @@ class DIPCar:
 
         self.is_moving = False
 
-    def _setup_pins(self):
+    def setup_pins(self):
         """
         Sets up the GPIO pins for motor control.
         This method initializes the GPIO pins for motor control by
@@ -139,8 +139,7 @@ class DIPCar:
         Returns:
             None
         """
-        
-        print("Stopping motors")
+
         for pin in [self.in1, self.in2, self.in3, self.in4]:
             gpio.output(pin, gpio.LOW)
         self.is_moving = False
@@ -160,7 +159,6 @@ class DIPCar:
         self.stop()
         self.pwm.stop()
         gpio.cleanup()
-        print("Exiting")
 
 
 def main():
