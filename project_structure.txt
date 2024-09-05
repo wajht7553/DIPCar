@@ -28,9 +28,7 @@ DIPCar/
                 - camera.py
                 - capture_images.py
                 - validate_calibration.py
-                - visualizations.py
             - lane_detection.py
-            - object_detection.py
         planning/
             - __init__.py
             - path_planner.py

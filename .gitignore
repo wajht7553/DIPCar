@@ -1,7 +1,7 @@
 .vscode/
-**/__pycache__
-**/test_road.mp4
+__pycache__
+test_road.mp4
 *.pyc
-**/tempCodeRunnerFile.py
+tempCodeRunnerFile.py
 src/perception/calibration_images/
 data/models/
