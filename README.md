@@ -1,6 +1,6 @@
 # Deep Learning Based Autonomous Navigation over Economical Hardware
 
-![DIPCar Logo](placeholder_for_logo.png)
+![DIPCar Logo](DIPCar.jpg)
 
 ## 🚗 Driving Innovation in Autonomous Navigation
 
