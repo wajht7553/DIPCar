@@ -26,7 +26,7 @@ DIPCar is a cutting-edge Final Year Project (FYP) that brings together deep lear
 1. [Add any specific setup instructions for Jetson Nano]
 2. Clone the repository:
    ```
-   git clone https://github.com/[your-username]/DIPCar.git
+   git clone https://github.com/wajht7553/DIPCar.git
    ```
 3. Install dependencies:
    ```
