@@ -21,16 +21,16 @@ class DecisionMaker:
         self.car = car
         self.speed = self.safe_speed = 25
         self.labels = [
-            'BACKGROUND', 'bicycle', 'bus', 'car', 'motorcycle', 'person', 
+            'BACKGROUND', 'bicycle', 'person', 
             'speed_limit_120', 'speed_limit_30', 'speed_limit_60',
-            'stop', 'traffic_green', 'traffic_red','traffic_yellow'
+            'stop', 'traffic_green', 'traffic_red', 'vehicle'
             ]
         self.stop_labels = ['stop', 'traffic_red']
         self.caution_labels = ['person', 'bicycle',]
         self.speed_limits = {
             'speed_limit_30': 30,
             'speed_limit_60': 60,
-            'speed_limit_120': 90,
+            'speed_limit_120': 100,
         }
         self.start()
 
