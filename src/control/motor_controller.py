@@ -33,6 +33,7 @@ class DIPCar:
         self.pwm.start(0)
 
         self.is_moving = False
+        self.current_speed = 0
 
     def setup_pins(self):
         """
@@ -64,6 +65,7 @@ class DIPCar:
         gpio.output(self.in3, gpio.LOW)
         gpio.output(self.in4, gpio.HIGH)
         self.pwm.set_duty_cycle(speed)
+        self.current_speed = speed
         self.is_moving = True
 
     def backward(self, speed):
@@ -80,6 +82,7 @@ class DIPCar:
         gpio.output(self.in3, gpio.HIGH)
         gpio.output(self.in4, gpio.LOW)
         self.pwm.set_duty_cycle(speed)
+        self.current_speed = speed
         self.is_moving = True
 
     def steer_left(self, speed, turn_factor=0.5):
@@ -129,21 +132,22 @@ class DIPCar:
         self.pwm.start(left_speed)
         self.is_moving = True
 
-    def stop(self):
-        """
-        Stops the motors.
-        This method stops the motors by setting the GPIO pins to LOW.
+    def stop(self, deceleration_time=1.5, steps=10):
+        if self.is_moving:
+            step_duration = deceleration_time / steps
+            for step in range(steps, 0, -1):
+                new_speed = self.current_speed * (step / steps)
+                self.pwm.set_duty_cycle(new_speed)
+                time.sleep(step_duration)
 
-        Args:
-            None
-        Returns:
-            None
-        """
+            # Finally stop the motors
+            self.pwm.set_duty_cycle(0)
+            for pin in [self.in1, self.in2, self.in3, self.in4]:
+                gpio.output(pin, gpio.LOW)
 
-        for pin in [self.in1, self.in2, self.in3, self.in4]:
-            gpio.output(pin, gpio.LOW)
-        self.is_moving = False
-        print("Motors stopped")
+            self.is_moving = False
+            self.current_speed = 0
+            print("Motors stopped smoothly")
 
     def cleanup(self):
         """
