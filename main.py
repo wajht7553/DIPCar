@@ -10,10 +10,10 @@ def main():
     camera = videoSource('/dev/video0')
     display = videoOutput('display://0')
     net = detectNet(
-        model='data/models/ssd-mobilenet.onnx',
-        labels='data/models/labels.txt',
+        model='data/models/detection/ssd-mobilenet.onnx',
+        labels='data/models/segmentation/labels.txt',
         input_blob='input_0', output_cvg='scores',
-        output_bbox='boxes', threshold=0.5
+        output_bbox='boxes', threshold=0.45
         )
     time.sleep(5)
     dipcar = DIPCar()
