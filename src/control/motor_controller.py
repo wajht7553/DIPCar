@@ -10,6 +10,7 @@ class DIPCar:
     longitudnal as well as the lateral movement of the car.
     A simple prototype model, indeed.
     """
+
     def __init__(self,
                  left_motor_pins=(31, 32, 33),
                  right_motor_pins=(36, 37, 38)
@@ -33,6 +34,7 @@ class DIPCar:
         self.pwm.start(0)
 
         self.is_moving = False
+        self.current_speed = 0
 
     def setup_pins(self):
         """
@@ -64,6 +66,7 @@ class DIPCar:
         gpio.output(self.in3, gpio.LOW)
         gpio.output(self.in4, gpio.HIGH)
         self.pwm.set_duty_cycle(speed)
+        self.current_speed = speed
         self.is_moving = True
 
     def backward(self, speed):
@@ -80,6 +83,7 @@ class DIPCar:
         gpio.output(self.in3, gpio.HIGH)
         gpio.output(self.in4, gpio.LOW)
         self.pwm.set_duty_cycle(speed)
+        self.current_speed = speed
         self.is_moving = True
 
     def steer_left(self, speed, turn_factor=0.5):
@@ -129,21 +133,31 @@ class DIPCar:
         self.pwm.start(left_speed)
         self.is_moving = True
 
-    def stop(self):
+    def stop(self, deceleration_time=1.5, steps=10):
         """
-        Stops the motors.
-        This method stops the motors by setting the GPIO pins to LOW.
+        Gradually stops the motor by decreasing the speed in steps over
+        a specified deceleration time.
 
         Args:
-            None
+            deceleration_time (float, optional): The total time in
+            seconds over which the motor should decelerate. Default
+            is 1.5 seconds.
+            steps (int, optional): The number of steps to divide the
+            deceleration time into. Default is 10 steps.
         Returns:
             None
         """
 
-        for pin in [self.in1, self.in2, self.in3, self.in4]:
-            gpio.output(pin, gpio.LOW)
-        self.is_moving = False
-        print("Motors stopped")
+        if self.is_moving:
+            step_duration = deceleration_time / steps
+            for step in range(steps, 0, -1):
+                new_speed = self.current_speed * step / steps
+                self.pwm.set_duty_cycle(new_speed)
+                time.sleep(step_duration)
+            for pin in [self.in1, self.in2, self.in3, self.in4]:
+                gpio.output(pin, gpio.LOW)
+            self.is_moving = False
+            self.current_speed = 0
 
     def cleanup(self):
         """
@@ -183,6 +197,7 @@ def main():
             print("Program stopped by the user")
             dipcar.cleanup()
             break
+
 
 if __name__ == "__main__":
     main()
