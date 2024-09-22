@@ -19,7 +19,6 @@ def main():
     net = segNet(
         model="data/models/segmentation/fcn_resnet18.onnx",
         labels="data/models/segmentation/labels.txt",
-        colors="~/DIPCar/data/models/segmentation/colors.txt",
         input_blob="input_0", output_blob="output_0"
         )
     net.SetOverlayAlpha(150)
