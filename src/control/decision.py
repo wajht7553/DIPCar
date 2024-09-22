@@ -58,7 +58,6 @@ class DecisionMaker:
         """
 
         is_cautious = False
-        self.car.is_moving = True
         for detection in detections:
             label_id = detection.ClassID
             label = self.labels[label_id]
