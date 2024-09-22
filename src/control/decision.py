@@ -68,9 +68,11 @@ class DecisionMaker:
                 return
             elif label in self.caution_labels:
                 is_cautious = True
+                self.car.is_moving = True
                 print(f'{label} detected. Slowing down.')
             elif label in self.speed_limits:
                 self.speed = self.speed_limits[label]
+                self.car.is_moving = True
                 print(f'Speed limit {self.speed} detected. Adjusting speed.')
             else:
                 self.car.is_moving = True
