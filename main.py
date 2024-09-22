@@ -13,7 +13,7 @@ def main():
         model='data/models/ssd-mobilenet.onnx',
         labels='data/models/labels.txt',
         input_blob='input_0', output_cvg='scores',
-        output_bbox='boxes', threshold=0.75
+        output_bbox='boxes', threshold=0.5
         )
     time.sleep(5)
     dipcar = DIPCar()

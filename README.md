@@ -23,10 +23,30 @@ DIPCar is a cutting-edge Final Year Project (FYP) that brings together deep lear
 
 ## 🚀 Quick Start
 
-1. [Add any specific setup instructions for Jetson Nano]
+1. ### Jetson Nano Setup
+   To begin, assemble the hardware components for the autonomous vehicle. The Jetson Nano 4GB developer kit will serve as the core processing unit, responsible for controlling the motors, sensors and perception systems.
+
+   **Steps to Set Up Jetson Nano**:
+   1. Install JetPack SDK on your Jetson Nano from the [NVIDIA website](https://developer.nvidia.com/embedded/jetpack).
+   2. Configure GPIO pins for motor and sensor interfacing:
+      * Connect DC motors to L298N motor driver.
+      * Wire the L298N to the Jetson Nano GPIO pins for motor control.
+      * Connect USB camera to the Jetson Nano's USB port for visual input and perception tasks.
+      * Mount all hardware components securely to the chassis.
+   3. Setup the development environment:
+      * Install necessary libraries for AI and computer vision
+      * Configure your preferred IDE
+   4. Connect the Jetson Nano and motor driver to their respective power supplies to power the system.
+
+   Once the hardware is set up, proceed to the next steps.
+
 2. Clone the repository:
    ```
-   git clone https://github.com/[your-username]/DIPCar.git
+   git clone https://github.com/wajht7553/DIPCar.git
+   ```
+   or
+   ```
+   git clone https://github.com/ImranNawar/DIPCar.git
    ```
 3. Install dependencies:
    ```
@@ -68,13 +88,15 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgements
 
-- Dr. Muhammad Sajjad
+- **Dr. Muhammad Sajjad**, Associate Professor, Department of Computer Science
+- Digital Image Processing Lab
 - Islamia College University, Peshawar
 - The open-source community for their invaluable tools and libraries
 
 ## 📬 Contact
 
 Wajahat Ullah - wajahatullah235@gmail.com
+Imran Nawar - imran1nawar@gmail.com
 
 Project Link: https://github.com/wajht7553/DIPCar
 
