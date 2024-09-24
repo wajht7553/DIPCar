@@ -2,9 +2,8 @@ import re
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
 # Function to extract mean IoU and accuracy from a log file
-
-
 def extract_segmentation_metrics(log_file_path):
     iou_list = []
     accuracy_list = []
@@ -23,9 +22,6 @@ def extract_segmentation_metrics(log_file_path):
     return iou_list, accuracy_list
 
 
-# function to return list of loss per epoch
-# each epoch is divided into 5 steps, so we need to take average of 5 steps to get loss per epoch
-# the loss is given as loss: 0.0799
 def extract_loss(log_file_path):
     loss_list = []
     epoch_losses = []
@@ -42,15 +38,14 @@ def extract_loss(log_file_path):
     return loss_list
 
 
-# Assuming log file is 'segmentation_log.txt'
+
 log_file_path = 'logs/fcn_train.txt'
 mean_iou, accuracy = extract_segmentation_metrics(log_file_path)
 loss = extract_loss(log_file_path)
 
 sns.set_theme()
 sns.set_style('whitegrid')
-# Assuming the lists `mean_iou` and `accuracy` are already filled with data
-epochs = list(range(1, len(mean_iou) + 1))  # Epoch numbers start from 1
+epochs = list(range(1, len(mean_iou) + 1))
 
 # Create a figure with two subplots
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
