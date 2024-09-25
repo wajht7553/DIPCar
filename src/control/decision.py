@@ -29,8 +29,8 @@ class DecisionMaker:
         self.caution_labels = ['person', 'bicycle']
         self.speed_limits = {
             'speed_limit_30': 25,
-            'speed_limit_60': 50,
-            'speed_limit_120': 70,
+            'speed_limit_60': 40,
+            'speed_limit_120': 50,
         }
         self.start()
 
