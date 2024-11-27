@@ -26,10 +26,10 @@ def main():
         visualize='overlay,mask',
         ignore_class='void',
         alpha='150.0',
-        stats=False
+        stats=True
     )
     seg_net = segNet(
-        model="data/models/segmentation/fcn_resnet18.onnx",
+        model="data/models/segmentation/fcn_resnet34.onnx",
         labels="data/models/segmentation/labels.txt",
         input_blob="input_0", output_blob="output_0"
     )
