@@ -45,13 +45,6 @@ def main():
             # Capture image
             image = camera.Capture()
 
-            # Convert CudaImage to numpy array
-            np_image = cudaToNumpy(image)
-
-            # Display the image in a separate window
-            cv2.imshow('Captured Image', np_image)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
 
             # Run detection
             detections = det_net.Detect(image, overlay='box,labels,lines')
@@ -65,6 +58,13 @@ def main():
 
             if buffers.mask:
                 seg_net.Mask(buffers.mask, filter_mode=args.filter_mode)
+            # Convert CudaImage to numpy array
+            np_image = cudaToNumpy(buffers.mask)
+
+            # Display the image in a separate window
+            cv2.imshow('Captured Image', np_image)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
             # Simple steering control based on segmentation mask
             # road_center = analyze_road_center(buffers.mask)
