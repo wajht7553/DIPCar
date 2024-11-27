@@ -56,7 +56,7 @@ class DecisionMaker:
         Returns:
             None
         """
-
+        self.car.is_moving = True
         is_cautious = False
         for detection in detections:
             label_id = detection.ClassID
