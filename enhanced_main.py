@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 import time
+import argparse
+from segnet_utils import SegmentationBuffers
 from jetson_inference import detectNet, segNet
 from src.control.decision import DecisionMaker
 from src.control.motor_controller import DIPCar
 from jetson_utils import videoSource, videoOutput, cudaOverlay
-from segnet_utils import SegmentationBuffers
-import argparse
 
 
 def main():
@@ -29,15 +29,15 @@ def main():
         stats=False
     )
     seg_net = segNet(
-        model="data/models/segmentation/fcn_resnet34.onnx",
+        model="data/models/segmentation/fcn_resnet18.onnx",
         labels="data/models/segmentation/labels.txt",
         input_blob="input_0", output_blob="output_0"
     )
     seg_net.SetOverlayAlpha(150)
     buffers = SegmentationBuffers(seg_net, args)
 
-    dipcar = DIPCar()
-    decision_maker = DecisionMaker(dipcar)
+    # dipcar = DIPCar()
+    # decision_maker = DecisionMaker(dipcar)
 
     try:
         while True:
@@ -62,7 +62,7 @@ def main():
             # steer_car(dipcar, road_center)
 
             # Make decision based on detections
-            decision_maker.make_decision(detections)
+            # decision_maker.make_decision(detections)
 
             # Render output
             if buffers.composite:
@@ -79,12 +79,15 @@ def main():
 
             if not camera.IsStreaming():
                 print("Camera failure!!!")
-                decision_maker.close()
+                # decision_maker.close()
                 break
 
-        dipcar.cleanup()
+        # dipcar.cleanup()
     except KeyboardInterrupt:
-        dipcar.cleanup()
+        print('Program terminated by user!')
+    finally:
+        # dipcar.cleanup()
+        pass
 
 
 def analyze_road_center(mask):
