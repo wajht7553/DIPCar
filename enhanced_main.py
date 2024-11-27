@@ -5,7 +5,8 @@ from segnet_utils import SegmentationBuffers
 from jetson_inference import detectNet, segNet
 from src.control.decision import DecisionMaker
 from src.control.motor_controller import DIPCar
-from jetson_utils import videoSource, videoOutput, cudaOverlay
+from jetson_utils import videoSource, videoOutput, cudaOverlay, cudaToNumpy
+import cv2
 
 
 def main():
@@ -43,6 +44,14 @@ def main():
         while True:
             # Capture image
             image = camera.Capture()
+
+            # Convert CudaImage to numpy array
+            np_image = cudaToNumpy(image)
+
+            # Display the image in a separate window
+            cv2.imshow('Captured Image', np_image)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
             # Run detection
             detections = det_net.Detect(image, overlay='box,labels,lines')
@@ -86,6 +95,7 @@ def main():
     except KeyboardInterrupt:
         print('Program terminated by user!')
     finally:
+        cv2.destroyAllWindows()
         # dipcar.cleanup()
         pass
 
