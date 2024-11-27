@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import cv2
 import time
 import argparse
 from segnet_utils import SegmentationBuffers
@@ -6,7 +7,6 @@ from jetson_inference import detectNet, segNet
 from src.control.decision import DecisionMaker
 from src.control.motor_controller import DIPCar
 from jetson_utils import videoSource, videoOutput, cudaOverlay, cudaToNumpy
-# import cv2
 
 
 def main():
@@ -46,7 +46,7 @@ def main():
             image = camera.Capture()
 
             # Convert CudaImage to numpy array
-            np_image = cudaToNumpy(image)
+            # np_image = cudaToNumpy(image)
 
             # Display the image in a separate window
             # cv2.imshow('Captured Image', np_image)
