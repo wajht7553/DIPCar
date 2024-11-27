@@ -6,7 +6,7 @@ from jetson_inference import detectNet, segNet
 from src.control.decision import DecisionMaker
 from src.control.motor_controller import DIPCar
 from jetson_utils import videoSource, videoOutput, cudaOverlay, cudaToNumpy
-import cv2
+# import cv2
 
 
 def main():
