@@ -83,6 +83,24 @@ def add_road_direction_line(cuda_image, binary_mask):
     return cudaFromNumpy(np_image)
 
 
+def calculate_steering_angle(binary_mask):
+    # Calculate the centroid of the white pixels (road)
+    moments = cv2.moments(binary_mask)
+    if moments["m00"] == 0:
+        return 0  # Default to 0 if no road detected
+
+    cx = int(moments["m10"] / moments["m00"])
+    image_width = binary_mask.shape[1]
+
+    # Calculate the deviation from the center
+    deviation = cx - (image_width // 2)
+
+    # Simple proportional control for steering
+    steering_angle = -deviation / (image_width // 2) * 45  # Scale to degrees
+
+    return steering_angle
+
+
 def main():
     input_options = {
         "width": 640,
@@ -138,6 +156,7 @@ def main():
             np_image_gray = cv2.cvtColor(np_image, cv2.COLOR_BGR2GRAY)
             _, binary_mask = cv2.threshold(np_image_gray, 56, 255, cv2.THRESH_BINARY)
 
+            print(f'Steering angle: {calculate_steering_angle(binary_mask):.2f} degrees')
             # Add road direction line directly to mask
             buffers.mask = add_road_direction_line(buffers.mask, binary_mask)
 
