@@ -70,6 +70,13 @@ def main():
             steering_angle = calculate_steering_angle(binary_mask)
             print(f'Steering angle: {steering_angle:.2f}')
 
+            # Fit polynomial to the segmented road
+            poly, poly_coeffs = fit_polynomial(binary_mask)
+            if poly is not None:
+                np_image = visualize_polynomial(np_image, poly, poly_coeffs)
+
+            # display the np_image using cv2
+            cv2.imshow('Segmentation', np_image)
             # Make decision based on detections
             # decision_maker.make_decision(detections)
 
@@ -96,6 +103,7 @@ def main():
         print('Program terminated by user!')
     finally:
         # dipcar.cleanup()
+        cv2.destroyAllWindows()
         pass
 
 
@@ -115,6 +123,34 @@ def calculate_steering_angle(binary_mask):
     steering_angle = -deviation / (image_width // 2) * 45  # Scale to degrees
 
     return steering_angle
+
+
+def fit_polynomial(binary_mask):
+    # Get the coordinates of the white pixels
+    white_pixels = np.column_stack(np.where(binary_mask > 0))
+    if len(white_pixels) == 0:
+        return None, None
+
+    # Fit a second-degree polynomial to the white pixels
+    poly_coeffs = np.polyfit(white_pixels[:, 1], white_pixels[:, 0], 2)
+    poly = np.poly1d(poly_coeffs)
+
+    return poly, poly_coeffs
+
+
+def visualize_polynomial(image, poly, poly_coeffs):
+    # Generate x values
+    x = np.linspace(0, image.shape[1] - 1, image.shape[1])
+    # Calculate corresponding y values
+    y = poly(x)
+
+    # Draw the polynomial on the image
+    for i in range(len(x) - 1):
+        pt1 = (int(x[i]), int(y[i]))
+        pt2 = (int(x[i + 1]), int(y[i + 1]))
+        cv2.line(image, pt1, pt2, (0, 255, 0), 2)
+
+    return image
 
 
 if __name__ == "__main__":
