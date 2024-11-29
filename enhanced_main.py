@@ -14,31 +14,52 @@ from segnet_utils import SegmentationBuffers
 
 
 def calculate_road_direction(binary_mask):
-    """Calculate road direction using PCA"""
+    """
+    Calculate road direction with enhanced stability and directional bias
+
+    Args:
+        binary_mask (np.ndarray): Binary road segmentation mask
+
+    Returns:
+        np.ndarray: Normalized direction vector
+    """
     # Get road pixels
     road_pixels = np.column_stack(np.where(binary_mask > 0))
 
-    # If no road pixels, return default direction
+    # If no road pixels, return default forward direction
     if len(road_pixels) == 0:
-        return np.array([0, -1])  # Pointing straight up
+        return np.array([0, -1])  # Pointing forward
 
-    # Perform Principal Component Analysis
-    mean = np.mean(road_pixels, axis=0)
-    covariance = np.cov(road_pixels.T)
-    eigenvalues, eigenvectors = np.linalg.eig(covariance)
+    # Compute bottom half of road pixels for more stable direction
+    height = binary_mask.shape[0]
+    bottom_half_pixels = road_pixels[road_pixels[:, 0] > height // 2]
 
-    # Get primary direction vector (eigenvector with largest eigenvalue)
-    direction_vector = eigenvectors[:, np.argmax(eigenvalues)]
+    if len(bottom_half_pixels) == 0:
+        bottom_half_pixels = road_pixels
 
-    return direction_vector
+    # Weighted linear regression to get direction
+    X = bottom_half_pixels[:, 1]
+    Y = bottom_half_pixels[:, 0]
+
+    # Weighted linear regression
+    weights = (Y - height) / height  # More weight to bottom pixels
+    weights = np.abs(weights)
+
+    # Fit line using weighted regression
+    coeffs = np.polyfit(X, Y, deg=1, w=weights)
+
+    # Direction vector from line slope
+    slope = coeffs[0]
+    direction = np.array([-slope, -1])
+
+    # Normalize direction
+    norm = np.linalg.norm(direction)
+    return direction / norm if norm > 0 else np.array([0, -1])
 
 
 def add_road_direction_line(cuda_image, binary_mask):
-    """Add road direction line to CUDA image"""
-    # Convert CUDA image to NumPy
+    """Add road direction line to CUDA image with enhanced stability"""
     np_image = cudaToNumpy(cuda_image)
-
-    # Get image dimensions
     height, width, _ = np_image.shape
 
     # Calculate road direction
@@ -47,17 +68,16 @@ def add_road_direction_line(cuda_image, binary_mask):
     # Start point: bottom middle of image
     start_point = (width // 2, height - 1)
 
-    # Calculate end point based on direction vector
-    scaled_direction = direction_vector * (height / 2)
+    # Calculate end point with fixed length
+    line_length = height // 2
     end_point = (
-        int(start_point[0] + scaled_direction[1]),
-        int(start_point[1] - scaled_direction[0]),
+        int(start_point[0] + direction_vector[0] * line_length),
+        int(start_point[1] + direction_vector[1] * line_length),
     )
 
     # Draw line on the image
     cv2.line(np_image, start_point, end_point, (0, 0, 255), 3)
 
-    # Convert back to CUDA image
     return cudaFromNumpy(np_image)
 
 
