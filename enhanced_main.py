@@ -91,7 +91,6 @@ def main():
     except KeyboardInterrupt:
         print('Program terminated by user!')
     finally:
-        cv2.destroyAllWindows()
         # dipcar.cleanup()
         pass
 
