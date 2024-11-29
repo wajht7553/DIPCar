@@ -11,7 +11,11 @@ from jetson_utils import videoSource, videoOutput, cudaOverlay, cudaToNumpy
 
 
 def main():
-    camera = videoSource('/dev/video0')
+    input_options = {
+        'width': 640,
+        'height': 480,
+    }
+    camera = videoSource('/dev/video0', options=input_options)
     display = videoOutput('display://0')
 
     # Detection model setup
