@@ -77,6 +77,7 @@ def main():
 
             # display the np_image using cv2
             cv2.imshow('Segmentation', np_image)
+            cv2.waitKey(1)
             # Make decision based on detections
             # decision_maker.make_decision(detections)
 
