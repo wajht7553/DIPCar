@@ -46,7 +46,6 @@ def main():
             # Capture image
             image = camera.Capture()
 
-
             # Run detection
             detections = det_net.Detect(image, overlay='box,labels,lines')
 
@@ -64,16 +63,8 @@ def main():
             np_image = np_image[:, :, ::-1]
             np_image_gray = cv2.cvtColor(np_image, cv2.COLOR_BGR2GRAY)
             _, binary_mask = cv2.threshold(np_image_gray, 56, 255, cv2.THRESH_BINARY)
-            print(np.unique(np_image_gray))
-
-            # Display the image in a separate window
-            cv2.imshow('Captured Image', binary_mask)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-
-            # Simple steering control based on segmentation mask
-            # road_center = analyze_road_center(buffers.mask)
-            # steer_car(dipcar, road_center)
+            steering_angle = calculate_steering_angle(binary_mask)
+            print(f'Steering angle: {steering_angle:.2f}')
 
             # Make decision based on detections
             # decision_maker.make_decision(detections)
@@ -105,27 +96,22 @@ def main():
         pass
 
 
-def analyze_road_center(mask):
-    # Simple analysis: check the bottom half of the image
-    height, width = mask.shape
-    bottom_half = mask[height//2:, :]
-    left_sum = bottom_half[:, :width//2].sum()
-    right_sum = bottom_half[:, width//2:].sum()
+def calculate_steering_angle(binary_mask):
+    # Calculate the centroid of the white pixels (road)
+    moments = cv2.moments(binary_mask)
+    if moments["m00"] == 0:
+        return 0  # Default to 0 if no road detected
 
-    if left_sum > right_sum:
-        return 'left'
-    elif right_sum > left_sum:
-        return 'right'
-    else:
-        return 'center'
+    cx = int(moments["m10"] / moments["m00"])
+    image_width = binary_mask.shape[1]
 
+    # Calculate the deviation from the center
+    deviation = cx - (image_width // 2)
 
-def steer_car(dipcar, road_center):
-    if road_center == 'left':
-        dipcar.steer_left(25)
-    elif road_center == 'right':
-        dipcar.steer_right(25)
-    # If center, the decision_maker will handle forward motion
+    # Simple proportional control for steering
+    steering_angle = -deviation / (image_width // 2) * 45  # Scale to degrees
+
+    return steering_angle
 
 
 if __name__ == "__main__":
