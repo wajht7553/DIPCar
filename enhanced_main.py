@@ -12,7 +12,10 @@ from jetson_utils import videoSource, videoOutput, cudaOverlay, cudaToNumpy
 def main():
     # Use GStreamer pipeline for video source
     video_path = '../test_road_2.mp4'
-    camera = videoSource(f'filesrc location={video_path} ! decodebin ! videoconvert ! video/x-raw,format=RGB ! appsink', argv=['--input-codec=h264'])
+    camera = videoSource(
+        f"filesrc location={video_path} ! qtdemux ! h264parse ! nvv4l2decoder ! nvvidconv ! video/x-raw,format=RGB ! appsink",
+        argv=["--input-codec=h264"],
+    )
     display = videoOutput('display://0')
 
     if not camera.IsStreaming():
