@@ -7,7 +7,7 @@ from segnet_utils import SegmentationBuffers
 from jetson_inference import detectNet, segNet
 from src.control.decision import DecisionMaker
 from src.control.motor_controller import DIPCar
-from jetson_utils import videoSource, videoOutput, cudaOverlay, cudaToNumpy
+from jetson_utils import videoSource, videoOutput, cudaOverlay, cudaToNumpy, cudaFromNumpy
 
 
 def main():
@@ -73,7 +73,7 @@ def main():
             # Fit polynomial to the segmented road
             poly, poly_coeffs = fit_polynomial(binary_mask)
             if poly is not None:
-                visualize_polynomial(buffers.mask, poly, poly_coeffs)
+                buffers.mask = visualize_polynomial(buffers.mask, poly, poly_coeffs)
 
             # Make decision based on detections
             # decision_maker.make_decision(detections)
@@ -136,16 +136,22 @@ def fit_polynomial(binary_mask):
     return poly, poly_coeffs
 
 def visualize_polynomial(cuda_image, poly, poly_coeffs):
+    # Convert CUDA image to NumPy array
+    np_image = cudaToNumpy(cuda_image)
+
     # Generate x values
-    x = np.linspace(0, cuda_image.width - 1, cuda_image.width)
+    x = np.linspace(0, np_image.shape[1] - 1, np_image.shape[1])
     # Calculate corresponding y values
     y = poly(x)
 
-    # Draw the polynomial on the CUDA image
+    # Draw the polynomial on the NumPy array
     for i in range(len(x) - 1):
         pt1 = (int(x[i]), int(y[i]))
         pt2 = (int(x[i + 1]), int(y[i + 1]))
-        cv2.line(cuda_image, pt1, pt2, (0, 255, 0), 2)
+        cv2.line(np_image, pt1, pt2, (0, 255, 0), 2)
+
+    # Convert NumPy array back to CUDA image
+    cuda_image = cudaFromNumpy(np_image)
 
     return cuda_image
 
