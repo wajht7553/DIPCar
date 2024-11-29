@@ -15,7 +15,7 @@ def main():
         'width': 640,
         'height': 480,
     }
-    camera = videoSource('/dev/video0', options=input_options)
+    camera = videoSource('../test_road_2.mp4', options=input_options)
     display = videoOutput('display://0')
 
     # Detection model setup
@@ -62,9 +62,9 @@ def main():
 
             if buffers.mask:
                 seg_net.Mask(buffers.mask, filter_mode=args.filter_mode)
+
             # Convert CudaImage to numpy array
             np_image = cudaToNumpy(buffers.mask)
-            np_image = np_image[:, :, ::-1]
             np_image_gray = cv2.cvtColor(np_image, cv2.COLOR_BGR2GRAY)
             _, binary_mask = cv2.threshold(np_image_gray, 56, 255, cv2.THRESH_BINARY)
             steering_angle = calculate_steering_angle(binary_mask)
@@ -73,11 +73,8 @@ def main():
             # Fit polynomial to the segmented road
             poly, poly_coeffs = fit_polynomial(binary_mask)
             if poly is not None:
-                np_image = visualize_polynomial(np_image, poly, poly_coeffs)
+                visualize_polynomial(buffers.mask, poly, poly_coeffs)
 
-            # display the np_image using cv2
-            cv2.imshow('Segmentation', np_image)
-            cv2.waitKey(1)
             # Make decision based on detections
             # decision_maker.make_decision(detections)
 
@@ -138,20 +135,19 @@ def fit_polynomial(binary_mask):
 
     return poly, poly_coeffs
 
-
-def visualize_polynomial(image, poly, poly_coeffs):
+def visualize_polynomial(cuda_image, poly, poly_coeffs):
     # Generate x values
-    x = np.linspace(0, image.shape[1] - 1, image.shape[1])
+    x = np.linspace(0, cuda_image.width - 1, cuda_image.width)
     # Calculate corresponding y values
     y = poly(x)
 
-    # Draw the polynomial on the image
+    # Draw the polynomial on the CUDA image
     for i in range(len(x) - 1):
         pt1 = (int(x[i]), int(y[i]))
         pt2 = (int(x[i + 1]), int(y[i + 1]))
-        cv2.line(image, pt1, pt2, (0, 255, 0), 2)
+        cv2.line(cuda_image, pt1, pt2, (0, 255, 0), 2)
 
-    return image
+    return cuda_image
 
 
 if __name__ == "__main__":
