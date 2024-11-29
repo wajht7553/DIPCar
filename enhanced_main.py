@@ -129,6 +129,13 @@ def fit_polynomial(binary_mask):
     if len(white_pixels) == 0:
         return None, None
 
+    # Image dimensions
+    height, width = binary_mask.shape
+
+    # Add a point at the bottom middle of the image
+    bottom_middle = np.array([[height - 1, width // 2]])
+    white_pixels = np.vstack([white_pixels, bottom_middle])
+
     # Fit a second-degree polynomial to the white pixels
     poly_coeffs = np.polyfit(white_pixels[:, 1], white_pixels[:, 0], 2)
     poly = np.poly1d(poly_coeffs)
