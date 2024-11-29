@@ -2,6 +2,7 @@
 import cv2
 import time
 import argparse
+import numpy as np
 from segnet_utils import SegmentationBuffers
 from jetson_inference import detectNet, segNet
 from src.control.decision import DecisionMaker
@@ -61,9 +62,12 @@ def main():
             # Convert CudaImage to numpy array
             np_image = cudaToNumpy(buffers.mask)
             np_image = np_image[:, :, ::-1]
+            np_image_gray = cv2.cvtColor(np_image, cv2.COLOR_BGR2GRAY)
+            _, binary_mask = cv2.threshold(np_image_gray, 56, 255, cv2.THRESH_BINARY)
+            print(np.unique(np_image_gray))
 
             # Display the image in a separate window
-            cv2.imshow('Captured Image', np_image)
+            cv2.imshow('Captured Image', binary_mask)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
