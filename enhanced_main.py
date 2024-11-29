@@ -13,6 +13,8 @@ from jetson_utils import (
 from segnet_utils import SegmentationBuffers
 
 
+# Add straight line to the road direction
+
 def calculate_road_direction(binary_mask):
     """
     Calculate road direction with enhanced stability and directional bias
