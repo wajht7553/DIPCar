@@ -60,6 +60,7 @@ def main():
                 seg_net.Mask(buffers.mask, filter_mode=args.filter_mode)
             # Convert CudaImage to numpy array
             np_image = cudaToNumpy(buffers.mask)
+            np_image = np_image[:, :, ::-1]
 
             # Display the image in a separate window
             cv2.imshow('Captured Image', np_image)
