@@ -20,7 +20,6 @@ def main():
     decision_maker = DecisionMaker(dipcar)
     try:
         while True:
-            start_time = time.time()
             image = camera.Capture()
             detections = net.Detect(image, overlay='box,labels,lines')
             decision_maker.make_decision(detections)
@@ -28,14 +27,13 @@ def main():
             display.SetStatus(
                 f'Detecting Objects at {net.GetNetworkFPS():.0f} FPS'
                 )
-            end_time = time.time()
-            print(f"latency: {end_time-start_time}")
             if not camera.IsStreaming():
                 print("Camera failure!!!")
-                decision_maker.close()
                 break
-        dipcar.cleanup()
     except KeyboardInterrupt:
+        print('Program terminated by user, Exiting...')
+    finally:
+        decision_maker.close()
         dipcar.cleanup()
 
 
