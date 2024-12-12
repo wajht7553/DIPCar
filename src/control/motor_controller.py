@@ -173,31 +173,3 @@ class DIPCar:
         self.stop()
         self.pwm.stop()
         gpio.cleanup()
-
-
-def main():
-    print("DIPCar started...")
-    dipcar = DIPCar()
-
-    while True:
-        try:
-            dipcar.forward(25)
-            time.sleep(2)
-
-            dipcar.steer_left(35)
-            time.sleep(2)
-
-            dipcar.steer_right(25)
-            time.sleep(2)
-
-            dipcar.backward(25)
-            time.sleep(2)
-
-        except KeyboardInterrupt:
-            print("Program stopped by the user")
-            dipcar.cleanup()
-            break
-
-
-if __name__ == "__main__":
-    main()
