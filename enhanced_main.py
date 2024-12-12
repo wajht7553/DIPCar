@@ -86,7 +86,7 @@ def main():
             )
 
             if not camera.IsStreaming():
-                print("Camera failure!!!")
+                print("Input failure!!!")
                 break
 
     except KeyboardInterrupt:
