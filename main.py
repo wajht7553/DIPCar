@@ -77,7 +77,7 @@ def main():
             if buffers.composite:
                 cudaOverlay(buffers.overlay, buffers.composite, 0, 0)
                 cudaOverlay(buffers.mask, buffers.composite, buffers.overlay.width, 0)
-                display.render(buffers.composite)
+                display.Render(buffers.composite)
             else:
                 display.Render(image)
             display.SetStatus(
