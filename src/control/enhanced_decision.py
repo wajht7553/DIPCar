@@ -19,6 +19,8 @@ class DecisionMaker:
         """
 
         self.car = car
+        self.detections = []
+        self.segmentation = None
         self.speed = self.safe_speed = 15
         self.labels = [
             'BACKGROUND', 'bicycle', 'person',
@@ -29,8 +31,8 @@ class DecisionMaker:
         self.caution_labels = ['person', 'bicycle']
         self.speed_limits = {
             'speed_limit_30': 25,
-            'speed_limit_60': 40,
-            'speed_limit_120': 50,
+            'speed_limit_60': 50,
+            'speed_limit_120': 70,
         }
         self.start()
 
@@ -48,38 +50,46 @@ class DecisionMaker:
 
         self.car.forward(self.safe_speed)
 
-    def make_decision(self, detections):
+    def update_detections(self, detections):
         """
-        Makes a decision based on the given detections.
+        Updates the detections.
         Parameters:
             detections: A list of detections.
         Returns:
             None
         """
-        self.car.is_moving = True
-        is_cautious = False
-        for detection in detections:
-            label_id = detection.ClassID
-            label = self.labels[label_id]
 
-            if label in self.stop_labels:
-                self.car.stop()
-                print('Stop sign detected. Stopping the car.')
-                return
-            elif label in self.caution_labels:
-                is_cautious = True
-                self.car.is_moving = True
-                print(f'{label} detected. Slowing down.')
-            elif label in self.speed_limits:
-                self.speed = self.speed_limits[label]
-                self.car.is_moving = True
-                print(f'Speed limit {self.speed} detected. Adjusting speed.')
-            else:
-                self.car.is_moving = True
+        self.detections = detections
 
-        if not self.car.is_moving:
-            return
-        elif is_cautious:
-            self.car.forward(self.safe_speed)
-        else:
-            self.car.forward(self.speed)
+    def update_segmentation(self, segmentation):
+        """
+        Updates the segmentation.
+        Parameters:
+            segmentation: The segmentation.
+        Returns:
+            None
+        """
+
+        self.segmentation = segmentation
+
+    def make_decision(self):
+        """
+        Makes a decision based on the given detections.
+        Parameters:
+            None
+        Returns:
+            None
+        """
+
+        self._process_detections()
+        self._process_segmentation()
+        self._control_car()
+
+    def _process_detections(self):
+        pass
+
+    def _process_segmentation(self):
+        pass
+
+    def _control_car(self):
+        pass
