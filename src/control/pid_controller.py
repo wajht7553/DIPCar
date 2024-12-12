@@ -14,12 +14,3 @@ class PIDController:
                   self.integral + self.kd * derivative)
         self.previous_error = error
         return output
-
-
-# Example usage:
-if __name__ == "__main__":
-    pid = PIDController(1.0, 0.1, 0.01)
-    target_speed = 30  # Target speed in km/h
-    current_speed = 25  # Current speed in km/h
-    control_signal = pid.compute_control(target_speed, current_speed)
-    print(f"Control Signal: {control_signal}")
