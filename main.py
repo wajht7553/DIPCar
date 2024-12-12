@@ -89,7 +89,6 @@ def main():
     except KeyboardInterrupt:
         print('Program terminated by user, Exiting...')
     finally:
-        decision_maker.close()
         dipcar.cleanup()
 
 
