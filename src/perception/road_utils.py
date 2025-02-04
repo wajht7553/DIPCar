@@ -82,7 +82,7 @@ def add_direction_line(cuda_image, binary_mask):
 
     cuda_image_with_line = cudaFromNumpy(np_image)
     print(
-        f"Converted NumPy array back to CUDA image with shape: {cuda_image_with_line.shape} and dtype: {cuda_image_with_line.dtype}"
+        f"Converted NumPy array back to CUDA image with shape: {cuda_image_with_line.shape} and dtype: {type(cuda_image_with_line)}"
     )
 
     return cuda_image_with_line
