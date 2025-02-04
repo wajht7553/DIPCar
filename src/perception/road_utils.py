@@ -58,6 +58,10 @@ def add_direction_line(cuda_image, binary_mask):
     """
 
     np_image = cudaToNumpy(cuda_image)
+    print(
+        f"Converted CUDA image to NumPy array with shape: {np_image.shape} and dtype: {np_image.dtype}"
+    )
+
     height, width, _ = np_image.shape
 
     # Calculate road direction
@@ -76,7 +80,12 @@ def add_direction_line(cuda_image, binary_mask):
     # Draw line on the image
     cv2.line(np_image, start_point, end_point, (0, 0, 255), 3)
 
-    return cudaFromNumpy(np_image)
+    cuda_image_with_line = cudaFromNumpy(np_image)
+    print(
+        f"Converted NumPy array back to CUDA image with shape: {cuda_image_with_line.shape} and dtype: {cuda_image_with_line.dtype}"
+    )
+
+    return cuda_image_with_line
 
 
 def get_steering_angle(binary_mask):
