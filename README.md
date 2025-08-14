@@ -64,10 +64,10 @@ DIPCar is a cutting-edge Final Year Project (FYP) that brings together deep lear
 DIPCar/
 ├── data/
 │   ├── calibration/
-│   ├── models/
 │   ├── preprocessed/
 │   └── raw/
 ├── docs/
+│   └── DIPCar-Research_Poster.pdf
 ├── logs/
 ├── notebooks/
 ├── scripts/
@@ -90,12 +90,12 @@ This project is licensed under the [MIT License](LICENSE).
 
 - **Dr. Muhammad Sajjad**, Associate Professor, Department of Computer Science
 - Digital Image Processing Lab
-- Islamia College University, Peshawar
+- Islamia College Peshawar (Public Sector University)
 - The open-source community for their invaluable tools and libraries
 
 ## 📬 Contact
 
-Wajahat Ullah - wajahatullah235@gmail.com
+Wajahat Ullah - wajahatullah235@gmail.com  
 Imran Nawar - imran1nawar@gmail.com
 
 Project Link: https://github.com/wajht7553/DIPCar
